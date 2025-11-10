@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta author="Jose Miguel">
+  <title>Clientela Peluquería - Fase 3</title>
+  <link rel="stylesheet" href="PHASE03.css">
+  <script src="PHASE03.js"></script>
+</head>
+<body>
+
+  <h1>Registro de Clientela</h1>
+
+  <form id="formCliente">
+    <div id="clock"></div><br>
+    <label>Nombre:</label>
+    <input type="text" id="nombre"><br><br>
+
+    <label>Año de registro:</label>
+    <input type="number" id="anio"><br><br>
+
+    <label>
+      <input type="checkbox" id="habitual">
+      Cliente habitual
+    </label><br><br>
+
+    <label>Categoría:</label>
+    <select id="categoria">
+      <option value="">Seleccionar...</option>
+      <option value="Corte de pelo">Corte de pelo</option>
+      <option value="Coloración">Coloración</option>
+      <option value="Peinado">Peinado</option>
+      <option value="Tratamiento">Tratamiento</option>
+    </select><br><br>
+
+    <label>Género:</label><br>
+    <input type="radio" name="genero" value="Hombre" id="hombre">
+    <label for="hombre">Hombre</label><br>
+    <input type="radio" name="genero" value="Mujer" id="mujer">
+    <label for="mujer">Mujer</label><br><br>
+
+    <button type="button" onclick="agregarCliente()">Añadir</button>
+    <button type="button" onclick="listarClientes()">Listar clientes</button>
+    <button type="button" onclick="finalizar()">Finalizar</button>
+    <button type="button" onclick="eliminarCliente()">Eliminar</button>
+    
+    <button type="button" onclick="toggleReloj()">Pausar/Reanudar Reloj</button>
+  
+  </form>
+
+  <p id="contador"></p>
+
+</body>
+</html>
