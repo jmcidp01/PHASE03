@@ -5,7 +5,7 @@
   <meta author="Jose Miguel">
   <title>Clientela Peluquería - Fase 3</title>
   <link rel="stylesheet" href="PHASE03.css">
-  <script src="PHASE03.js"></script>
+  <script src="PHASE03.js" defer></script>
 </head>
 <body>
 
@@ -44,7 +44,8 @@
     <button type="button" onclick="finalizar()">Finalizar</button>
     <button type="button" onclick="eliminarCliente()">Eliminar</button>
     
-    <button type="button" onclick="toggleReloj()">Pausar/Reanudar Reloj</button>
+    <button type="button" id="pararReloj">Pausar/Reanudar Reloj</button>
+    <button type="button" id="anadirlocalstorage">Añadir datos al local Storage</button>
   
   </form>
 

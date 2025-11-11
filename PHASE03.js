@@ -1,23 +1,37 @@
 var clientes = [];
+const clock = document.getElementById('clock');
 
 let myInterval = setInterval(myTimer, 1000);
 /* comentario para nueva rama*/
 /* otro comentario para nueva rama*/
 function myTimer() {
   const date = new Date();
-  if (clock) {
     clock.innerHTML = `Hora actual: ${date.toLocaleTimeString()}`;
-  }
 }
 
-function toggleReloj() {
+/*function toggleReloj() {
   if (myInterval) {
     clearInterval(myInterval);
     myInterval = null;
   } else {
     myInterval = setInterval(myTimer, 1000);
   }
-}
+}*/
+
+document.getElementById('pararReloj').onclick = function() {
+  if (myInterval) {
+  clearInterval(myInterval);
+  myInterval = null;
+  } else {
+    myInterval = setInterval(myTimer, 1000);
+  }
+ }
+
+ document.getElementById('anadirlocalstorage').onclick=function(){
+    localStorage.setItem('name','Obaseki Nosa');
+    localStorage.setItem('age','22');
+    window.alert('Datos guardados en LocalStorage')
+ }
 
 
 function capturarDatos() {
