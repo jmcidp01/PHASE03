@@ -1,7 +1,8 @@
 var clientes = [];
 
 let myInterval = setInterval(myTimer, 1000);
-
+/* comentario para nueva rama*/
+/* otro comentario para nueva rama*/
 function myTimer() {
   const date = new Date();
   if (clock) {
