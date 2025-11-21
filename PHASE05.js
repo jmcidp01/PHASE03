@@ -214,3 +214,4 @@ function actualizarContador() {
   document.getElementById("contador").textContent =
     "Clientes añadidos: " + clientes.length;
 }
+//Esto es una subida com el script de Git en powershell
