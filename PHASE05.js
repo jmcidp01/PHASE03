@@ -215,3 +215,4 @@ function actualizarContador() {
     "Clientes añadidos: " + clientes.length;
 }
 //Esto es una subida com el script de Git en powershell
+//This is a commit with Git script in powershell
