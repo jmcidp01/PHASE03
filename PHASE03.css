@@ -41,3 +41,12 @@ button:hover {
   margin-top: 20px;
   font-weight: bold;
 }
+#Infoclientes{
+  border: 1px solid black;
+  text-align: center;
+
+}
+#Infoclientes th{
+  background-color: lightsalmon;
+  color: white;
+}

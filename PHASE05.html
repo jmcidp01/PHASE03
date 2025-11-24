@@ -3,9 +3,8 @@
 <head>
   <meta charset="UTF-8">
   <meta author="Jose Miguel">
-  <title>Clientela Peluquería - Fase 3</title>
+  <title>Clientela Peluquería - Fase 5</title>
   <link rel="stylesheet" href="PHASE03.css">
-  <script src="PHASE05.js" defer></script>
 </head>
 <body>
 
@@ -48,8 +47,16 @@
     <label for="hombre">Hombre</label><br>
     <input type="radio" name="genero" value="Mujer" id="mujer">
     <label for="mujer">Mujer</label><br><br>
+    <div>
+      <table id="Infoclientes">
+          <thead>
+            <tr><th>Nombre</th><th>Año registro</th><th>Cliente habitual</th><th>Categoria</th><th>Género</th></tr>
+          </thead>
+          <tbody></tbody>
+      </table>
+    </div>
 
-    <button type="button" onclick="agregarCliente()">Añadir</button>
+    <button type="button" id='btnAddCliente'>Añadir</button>
     <button type="button" onclick="listarClientes()">Listar clientes</button>
     <button type="button" onclick="finalizar()">Finalizar</button>
     <button type="button" onclick="eliminarCliente()">Eliminar</button>
@@ -60,6 +67,8 @@
   </form>
 
   <p id="contador"></p>
+
+  <script src="PHASE05.js" ></script>
 
 </body>
 </html>

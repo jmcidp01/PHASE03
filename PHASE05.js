@@ -3,15 +3,107 @@ let myInterval = null;
 const clock = document.getElementById("clock");
 const botonReloj = document.getElementById("pararReloj");
 const selectorColor = document.getElementById("colores"); // Referencia al select de color
+const tbody=document.querySelector('#Infoclientes tbody');
+const nombretxt = document.getElementById("nombre");
+const anio = document.getElementById("anio");
+const habitual = document.getElementById("habitual");
+const categoria = document.getElementById("categoria");
+const generoRadios = document.getElementsByName("genero");
+const btnAddCliente = document.getElementById("agregarCliente");
+
+
+function agregarCliente() {
+  let datos = capturarDatos();
+
+  if (datos.nombre === "" || datos.anio === "" || datos.categoria === "" || datos.genero === "") {
+    alert("Por favor, completa todos los campos antes de añadir.");
+    return;
+  }
+
+  if (datos.nombre.length > 30) {
+    alert("El nombre no puede tener más de 30 caracteres.");
+    return;
+  }
+
+  let anioNum = Number(datos.anio);
+  if (anioNum < 1900 || anioNum > 2025) {
+    alert("El año debe estar entre 1900 y 2025.");
+    return;
+  }
+
+  for (let i = 0; i < clientes.length; i++) {
+    if (clientes[i].nombre.toLowerCase() === datos.nombre.toLowerCase()) {
+      alert("Ese cliente ya está registrado.");
+      return;
+    }
+  }
+
+  clientes.push({
+    nombre: datos.nombre,
+    anio: anioNum,
+    habitual: datos.habitual,
+    categoria: datos.categoria,
+    genero: datos.genero
+  });
+
+  guardarDatos();
+
+  alert("Cliente añadido correctamente.");
+  actualizarContador();
+  document.getElementById("formCliente").reset();
+  mostrarClientesTabla();
+}
+btnAddCliente.addEventListener("click", agregarCliente);
+/*btnAddCliente.addEventListener("click", () => { 
+          let datos = capturarDatos();
+
+          if (datos.nombre === "" || datos.anio === "" || datos.categoria === "" || datos.genero === "") {
+            alert("Por favor, completa todos los campos antes de añadir.");
+            return;
+          }
+
+          if (datos.nombre.length > 30) {
+            alert("El nombre no puede tener más de 30 caracteres.");
+            return;
+          }
+
+          let anioNum = Number(datos.anio);
+          if (anioNum < 1900 || anioNum > 2025) {
+            alert("El año debe estar entre 1900 y 2025.");
+            return;
+          }
+
+          for (let i = 0; i < clientes.length; i++) {
+            if (clientes[i].nombre.toLowerCase() === datos.nombre.toLowerCase()) {
+              alert("Ese cliente ya está registrado.");
+              return;
+            }
+          }
+
+          clientes.push({
+            nombre: datos.nombre,
+            anio: anioNum,
+            habitual: datos.habitual,
+            categoria: datos.categoria,
+            genero: datos.genero  
+          });
+
+          guardarDatos();
+
+          alert("Cliente añadido correctamente.");
+          actualizarContador();
+          document.getElementById("formCliente").reset();
+          mostrarClientesTabla();
+  
+});*/
 
 document.addEventListener("DOMContentLoaded", () => {
   cargarDatos();
   cargarColorReloj(); // Cargar el color al iniciar
   iniciarReloj();
   actualizarContador();
-  
-  // Evento para cambiar el color cuando se selecciona en el menú
   selectorColor.addEventListener("change", cambiarColorReloj);
+  mostrarClientesTabla();
 });
 
 function guardarDatos() {
@@ -26,14 +118,11 @@ function cargarDatos() {
   }
 }
 
-// --- NUEVAS FUNCIONES PARA EL COLOR ---
-
 function cambiarColorReloj() {
   const colorSeleccionado = selectorColor.value;
   clock.style.color = colorSeleccionado;
   localStorage.setItem("clockColor", colorSeleccionado); // Guardar en localStorage
 }
-
 function cargarColorReloj() {
   const colorGuardado = localStorage.getItem("clockColor");
   if (colorGuardado) {
@@ -41,9 +130,6 @@ function cargarColorReloj() {
     selectorColor.value = colorGuardado; // Poner el select en la opción correcta
   }
 }
-
-// --------------------------------------
-
 function borrarDatos() {
   if (confirm("¿Seguro que quieres borrar todos los datos?")) {
     clientes = [];
@@ -92,62 +178,20 @@ function alternarReloj() {
 document.getElementById("pararReloj").onclick = alternarReloj;
 
 function capturarDatos() {
-  var nombre = document.getElementById("nombre").value.trim();
-  var anio = document.getElementById("anio").value.trim();
-  var habitual = document.getElementById("habitual").checked;
-  var categoria = document.getElementById("categoria").value;
-
-  var generoRadios = document.getElementsByName("genero");
-  var genero = "";
-  for (var i = 0; i < generoRadios.length; i++) {
+  let nombretxt=nombretxt.value.trim();
+  let anio=anio.value.trim();
+  let checkedh=habitual.checked;
+  let categoria=categoria.value;
+  const genero = "";
+  for (let i = 0; i < generoRadios.length; i++) {
     if (generoRadios[i].checked) {
       genero = generoRadios[i].value;
     }
   }
 
-  return { nombre, anio, habitual, categoria, genero };
+  return { nombretxt, anio, checkedh, categoria, genero };
 }
 
-function agregarCliente() {
-  var datos = capturarDatos();
-
-  if (datos.nombre === "" || datos.anio === "" || datos.categoria === "" || datos.genero === "") {
-    alert("Por favor, completa todos los campos antes de añadir.");
-    return;
-  }
-
-  if (datos.nombre.length > 30) {
-    alert("El nombre no puede tener más de 30 caracteres.");
-    return;
-  }
-
-  var anioNum = Number(datos.anio);
-  if (anioNum < 1900 || anioNum > 2025) {
-    alert("El año debe estar entre 1900 y 2025.");
-    return;
-  }
-
-  for (var i = 0; i < clientes.length; i++) {
-    if (clientes[i].nombre.toLowerCase() === datos.nombre.toLowerCase()) {
-      alert("Ese cliente ya está registrado.");
-      return;
-    }
-  }
-
-  clientes.push({
-    nombre: datos.nombre,
-    anio: anioNum,
-    habitual: datos.habitual,
-    categoria: datos.categoria,
-    genero: datos.genero
-  });
-
-  guardarDatos();
-
-  alert("Cliente añadido correctamente.");
-  actualizarContador();
-  document.getElementById("formCliente").reset();
-}
 
 function eliminarCliente() {
   if (clientes.length === 0) {
@@ -172,6 +216,7 @@ function eliminarCliente() {
   } else {
     alert("No se encontró un cliente con ese nombre.");
   }
+  mostrarClientesTabla();
 }
 
 function listarClientes() {
@@ -213,6 +258,20 @@ function finalizar() {
 function actualizarContador() {
   document.getElementById("contador").textContent =
     "Clientes añadidos: " + clientes.length;
+}
+
+function mostrarClientesTabla(){
+  tbody.innerHTML='';
+  clientes.forEach(c =>{
+    tbody.innerHTML+=`
+    <tr>
+    <td>${c.nombre}</td>
+    <td>${c.anio}</td>
+    <td>${c.habitual ? "Si":"No"}</td>
+    <td>${c.categoria}</td>
+    <td>${c.genero}</td>
+    </tr>`
+  })
 }
 //Esto es una subida com el script de Git en powershell
 //This is a commit with Git script in powershell
