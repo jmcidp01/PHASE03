@@ -1,16 +1,27 @@
 var clientes = [];
 let myInterval = null;
 const clock = document.getElementById("clock");
-const botonReloj = document.getElementById("pararReloj");
+const btnReloj = document.getElementById("pararReloj");
 const selectorColor = document.getElementById("colores"); // Referencia al select de color
 const tbody=document.querySelector('#Infoclientes tbody');
-const nombretxt = document.getElementById("nombre");
-const anio = document.getElementById("anio");
-const habitual = document.getElementById("habitual");
-const categoria = document.getElementById("categoria");
+const txtNombre= document.getElementById("nombre");
+const txtAnio = document.getElementById("anio");
+const chkHabitual = document.getElementById("habitual");
+const SelectCategoria = document.getElementById("categoria");
 const generoRadios = document.getElementsByName("genero");
-const btnAddCliente = document.getElementById("agregarCliente");
 
+const btnAddCliente = document.getElementById("btnAddCliente");
+
+btnAddCliente.addEventListener("click", agregarCliente);
+
+document.addEventListener("DOMContentLoaded", () => {
+  cargarDatos();
+  cargarColorReloj(); // Cargar el color al iniciar
+  iniciarReloj();
+  actualizarContador();
+  selectorColor.addEventListener("change", cambiarColorReloj);
+  mostrarClientesTabla();
+});
 
 function agregarCliente() {
   let datos = capturarDatos();
@@ -47,64 +58,13 @@ function agregarCliente() {
   });
 
   guardarDatos();
+  actualizarContador();
+  mostrarClientesTabla();
 
   alert("Cliente añadido correctamente.");
-  actualizarContador();
   document.getElementById("formCliente").reset();
-  mostrarClientesTabla();
-}
-btnAddCliente.addEventListener("click", agregarCliente);
-/*btnAddCliente.addEventListener("click", () => { 
-          let datos = capturarDatos();
-
-          if (datos.nombre === "" || datos.anio === "" || datos.categoria === "" || datos.genero === "") {
-            alert("Por favor, completa todos los campos antes de añadir.");
-            return;
-          }
-
-          if (datos.nombre.length > 30) {
-            alert("El nombre no puede tener más de 30 caracteres.");
-            return;
-          }
-
-          let anioNum = Number(datos.anio);
-          if (anioNum < 1900 || anioNum > 2025) {
-            alert("El año debe estar entre 1900 y 2025.");
-            return;
-          }
-
-          for (let i = 0; i < clientes.length; i++) {
-            if (clientes[i].nombre.toLowerCase() === datos.nombre.toLowerCase()) {
-              alert("Ese cliente ya está registrado.");
-              return;
-            }
-          }
-
-          clientes.push({
-            nombre: datos.nombre,
-            anio: anioNum,
-            habitual: datos.habitual,
-            categoria: datos.categoria,
-            genero: datos.genero  
-          });
-
-          guardarDatos();
-
-          alert("Cliente añadido correctamente.");
-          actualizarContador();
-          document.getElementById("formCliente").reset();
-          mostrarClientesTabla();
   
-});*/
-
-document.addEventListener("DOMContentLoaded", () => {
-  cargarDatos();
-  cargarColorReloj(); // Cargar el color al iniciar
-  iniciarReloj();
-  actualizarContador();
-  selectorColor.addEventListener("change", cambiarColorReloj);
-  mostrarClientesTabla();
-});
+}
 
 function guardarDatos() {
   localStorage.setItem("clientes", JSON.stringify(clientes));
@@ -155,7 +115,7 @@ function iniciarReloj() {
   actualizarReloj();
 
   myInterval = setInterval(actualizarReloj, 1000);
-  botonReloj.textContent = "Detener reloj";
+  btnReloj.value = "Detener reloj";
 }
 
 function detenerReloj() {
@@ -164,7 +124,7 @@ function detenerReloj() {
   clock.style.textDecoration = "line-through";
   clock.style.opacity = "0.5";
   clock.innerHTML += " - Parado";
-  botonReloj.textContent = "Iniciar reloj";
+  btnReloj.value = "Iniciar reloj";
 }
 
 function alternarReloj() {
@@ -178,18 +138,19 @@ function alternarReloj() {
 document.getElementById("pararReloj").onclick = alternarReloj;
 
 function capturarDatos() {
-  let nombretxt=nombretxt.value.trim();
-  let anio=anio.value.trim();
-  let checkedh=habitual.checked;
-  let categoria=categoria.value;
-  const genero = "";
+  let nombre=txtNombre.value.trim();
+  let anio=txtAnio.value.trim();
+  let habitual=chkHabitual.checked;
+  let categoria=SelectCategoria.value;
+
+  let genero = "";
   for (let i = 0; i < generoRadios.length; i++) {
     if (generoRadios[i].checked) {
       genero = generoRadios[i].value;
     }
   }
 
-  return { nombretxt, anio, checkedh, categoria, genero };
+  return { nombre, anio, habitual, categoria, genero };
 }
 
 
