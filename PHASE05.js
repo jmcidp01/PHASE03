@@ -1,4 +1,4 @@
-var clientes = [];
+let clientes = [];
 let myInterval = null;
 const clock = document.getElementById("clock");
 const botonReloj = document.getElementById("pararReloj");
@@ -9,9 +9,9 @@ const anio = document.getElementById("anio");
 const habitual = document.getElementById("habitual");
 const categoria = document.getElementById("categoria");
 const generoRadios = document.getElementsByName("genero");
-const btnAddCliente = document.getElementById("agregarCliente");
+const btnAddCliente = document.getElementById("btnAddCliente");
 
-
+btnAddCliente.addEventListener('click', agregarCliente);
 function agregarCliente() {
   let datos = capturarDatos();
 
@@ -53,7 +53,6 @@ function agregarCliente() {
   document.getElementById("formCliente").reset();
   mostrarClientesTabla();
 }
-btnAddCliente.addEventListener("click", agregarCliente);
 /*btnAddCliente.addEventListener("click", () => { 
           let datos = capturarDatos();
 
