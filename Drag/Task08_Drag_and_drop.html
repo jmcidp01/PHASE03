@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Clasificación Drag & Drop</title>
+    <link rel="stylesheet" href="Task08_drag_and_drop.css">
+    <script type="module" src="main.js"></script>
+</head>
+<body>
+
+    <header>
+        <h1>Clasifica los elementos</h1>
+        <p>Arrastra las imágenes a su categoría correcta y pulsa Validar.</p>
+    </header>
+
+    <main>
+        <div class="grupo">
+            <h3>Comidas</h3>
+            <div id="zona-comida" class="dropzone" data-categoria="comida"></div>
+        </div>
+
+        <div class="grupo">
+            <h3>Animales</h3>
+            <div id="zona-animal" class="dropzone" data-categoria="animal"></div>
+        </div>
+
+        <div class="grupo">
+            <h3>Plantas</h3>
+            <div id="zona-planta" class="dropzone" data-categoria="planta"></div>
+        </div>
+    </main>
+
+    <section id="origen">
+        <h3>Elementos para clasificar:</h3>
+        <div class="banco-imagenes">
+            <img id="img1" src="img/comida1.jpg" draggable="true" data-categoria="comida">
+            <img id="img2" src="img/annimales1.jpg" draggable="true" data-categoria="animal">
+            <img id="img3" src="img/plantas1.jpg" draggable="true" data-categoria="planta">
+            <img id="img4" src="img/comida2.jpg" draggable="true" data-categoria="comida">
+            <img id="img5" src="img/animales2.jpg" draggable="true" data-categoria="animal">
+            <img id="img6" src="img/plantas2.jpg" draggable="true" data-categoria="planta">
+        </div>
+    </section>
+
+    <footer>
+        <button id="btn-validar">VALIDAR RESPUESTAS</button>
+        <button id="btn-reiniciar" onclick="location.reload()">REINICIAR</button>
+    </footer>
+
+</body>
+</html>

@@ -1,0 +1,61 @@
+body {
+    font-family: sans-serif;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    background-color: #f4f4f4;
+}
+
+main {
+    display: flex;
+    gap: 20px;
+    margin-bottom: 30px;
+}
+
+.grupo {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.dropzone {
+    width: 160px;
+    height: 160px; /* Un poco más alto para que quepan 2 items */
+    border: 2px dashed #333;
+    background: #fff;
+    display: flex;
+    flex-wrap: wrap; /* Permite que haya varios items dentro */
+    justify-content: center;
+    align-items: center;
+    transition: background 0.3s;
+}
+
+img {
+    width: 60px;
+    height: 60px;
+    margin: 5px;
+    cursor: grab;
+    object-fit: cover;
+    border: 2px solid transparent; /* Preparado para el borde de validación */
+}
+
+/* FEEDBACK VISUAL */
+img.correcto {
+    border: 4px solid #2ecc71; /* VERDE */
+    box-shadow: 0 0 10px #2ecc71;
+}
+
+img.incorrecto {
+    border: 4px solid #e74c3c; /* ROJO */
+    box-shadow: 0 0 10px #e74c3c;
+}
+
+button {
+    padding: 10px 20px;
+    font-size: 16px;
+    cursor: pointer;
+    background-color: #333;
+    color: white;
+    border: none;
+    border-radius: 5px;
+}
