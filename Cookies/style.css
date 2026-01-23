@@ -1,0 +1,669 @@
+/* =========================================
+   1. VARIABLES Y CONFIGURACIÓN BASE
+   ========================================= */
+   :root {
+    --bg-body: #09090b;       /* Negro suave */
+    --bg-card: #18181b;       /* Gris muy oscuro */
+    --bg-sidebar: #121215;    /* Sidebar sólido (sin blur costoso) */
+    
+    --primary: #6366f1;       /* Indigo */
+    --primary-hover: #4f46e5;
+    --accent: #06b6d4;        /* Cyan */
+    --danger: #ef4444;        /* Rojo */
+    
+    --text-main: #f4f4f5;
+    --text-muted: #a1a1aa;
+    --border: rgba(255, 255, 255, 0.1);
+    
+    --radius: 12px;
+    --sidebar-width: 400px;
+    --transition: all 0.2s ease-in-out;
+}
+
+* { box-sizing: border-box; margin: 0; padding: 0; outline: none; }
+
+body {
+    font-family: 'Inter', system-ui, sans-serif;
+    background-color: var(--bg-body);
+    color: var(--text-main);
+    /* Fondo sutil estático para no consumir CPU */
+    background-image: radial-gradient(circle at top right, rgba(99, 102, 241, 0.1), transparent 40%);
+    min-height: 100vh;
+}
+
+/* =========================================
+   2. LAYOUT Y HEADER
+   ========================================= */
+.app-layout {
+    display: flex;
+    min-height: 100vh;
+}
+
+.main-content {
+    flex: 1; /* Ocupa el espacio restante */
+    margin-right: var(--sidebar-width);
+    padding: 60px;
+}
+
+header { margin-bottom: 60px; }
+
+.header-top {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+}
+
+header h1 {
+    font-size: 3rem;
+    font-weight: 800;
+    letter-spacing: -0.03em;
+    color: white;
+}
+
+.highlight { color: var(--primary); }
+
+header p { color: var(--text-muted); font-size: 1.1rem; }
+
+/* Botón Login (Simple y limpio) */
+.btn-login-trigger {
+    background: transparent;
+    border: 1px solid var(--primary);
+    color: var(--primary);
+    padding: 10px 24px;
+    border-radius: var(--radius);
+    cursor: pointer;
+    font-weight: 600;
+    transition: var(--transition);
+}
+
+.btn-login-trigger:hover {
+    background: var(--primary);
+    color: white;
+}
+
+/* Barra de búsqueda */
+.search-wrapper { margin-top: 30px; max-width: 600px; }
+
+#search-input {
+    width: 100%;
+    padding: 16px;
+    background: var(--bg-card);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    color: white;
+    font-size: 1rem;
+    transition: var(--transition);
+}
+
+#search-input:focus {
+    border-color: var(--primary);
+    box-shadow: 0 0 0 2px rgba(99, 102, 241, 0.2);
+}
+
+/* =========================================
+   3. GRID DE PRODUCTOS
+   ========================================= */
+.products-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+    gap: 30px;
+}
+
+.product-card {
+    background: var(--bg-card);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 24px;
+    display: flex;
+    flex-direction: column;
+    transition: var(--transition);
+}
+
+.product-card:hover {
+    transform: translateY(-4px);
+    border-color: var(--primary);
+    box-shadow: 0 10px 20px rgba(0,0,0,0.2);
+}
+
+.product-card h3 {
+    font-size: 1.25rem;
+    margin-bottom: 8px;
+    font-weight: 600;
+}
+
+.product-card .price {
+    font-size: 1.5rem;
+    font-weight: 700;
+    color: var(--accent);
+    margin-bottom: 20px;
+    display: block;
+}
+
+/* Botón Añadir */
+.btn-add-initial {
+    width: 100%;
+    padding: 12px;
+    background: white;
+    color: black;
+    border: none;
+    border-radius: var(--radius);
+    font-weight: 600;
+    cursor: pointer;
+    transition: var(--transition);
+}
+
+.btn-add-initial:hover { background: #e4e4e7; }
+
+/* Controles de Cantidad */
+.quantity-controls {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    background: #27272a;
+    padding: 6px;
+    border-radius: var(--radius);
+}
+
+.btn-qty {
+    width: 32px;
+    height: 32px;
+    background: #3f3f46;
+    border: none;
+    border-radius: 8px;
+    color: white;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.1rem;
+}
+.btn-qty:hover { background: #52525b; }
+.btn-plus { background: var(--primary); }
+.btn-plus:hover { background: var(--primary-hover); }
+
+.qty-display { font-weight: bold; font-family: monospace; }
+
+/* =========================================
+   4. SIDEBAR (CARRITO)
+   ========================================= */
+.cart-sidebar {
+    width: var(--sidebar-width);
+    height: 100vh;
+    position: fixed;
+    right: 0;
+    top: 0;
+    background: var(--bg-sidebar);
+    border-left: 1px solid var(--border);
+    display: flex;
+    flex-direction: column;
+    z-index: 100;
+    box-shadow: -5px 0 20px rgba(0,0,0,0.3);
+}
+
+.cart-header {
+    padding: 30px;
+    border-bottom: 1px solid var(--border);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.badge {
+    background: var(--primary);
+    color: white;
+    padding: 4px 12px;
+    border-radius: 20px;
+    font-size: 0.85rem;
+    font-weight: bold;
+}
+
+.cart-items-container {
+    flex: 1;
+    overflow-y: auto;
+    padding: 20px;
+}
+
+.cart-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background: rgba(255,255,255,0.03);
+    margin-bottom: 12px;
+    padding: 16px;
+    border-radius: 8px;
+    border: 1px solid transparent;
+}
+
+.cart-item-info h4 { font-size: 0.95rem; margin-bottom: 4px; }
+.cart-item-info p { color: var(--text-muted); font-size: 0.85rem; }
+
+/* Sección Cupón */
+.coupon-section {
+    padding: 20px;
+    border-top: 1px solid var(--border);
+    display: flex;
+    gap: 10px;
+}
+
+#coupon-input {
+    flex: 1;
+    padding: 10px;
+    background: rgba(0,0,0,0.2);
+    border: 1px solid var(--border);
+    color: white;
+    border-radius: 6px;
+}
+
+.btn-coupon {
+    padding: 0 16px;
+    background: var(--bg-card);
+    border: 1px solid var(--border);
+    color: white;
+    border-radius: 6px;
+    cursor: pointer;
+}
+.btn-coupon:hover { border-color: var(--primary); color: var(--primary); }
+
+/* Footer del Carrito */
+.cart-footer {
+    padding: 30px;
+    background: rgba(0,0,0,0.2);
+    border-top: 1px solid var(--border);
+}
+
+.total-row {
+    display: flex;
+    justify-content: space-between;
+    font-size: 1.25rem;
+    margin-bottom: 20px;
+    color: var(--text-muted);
+}
+
+.total-price {
+    color: white;
+    font-weight: 800;
+}
+
+.discount-row { color: var(--accent); font-size: 1rem; }
+
+.action-buttons {
+    display: grid;
+    grid-template-columns: 1fr 2fr;
+    gap: 12px;
+}
+
+.btn-ghost {
+    background: transparent;
+    border: 1px solid var(--border);
+    color: var(--text-muted);
+    border-radius: 8px;
+    padding: 14px;
+    cursor: pointer;
+    transition: var(--transition);
+}
+.btn-ghost:hover { border-color: var(--danger); color: var(--danger); }
+
+.btn-checkout {
+    background: var(--primary);
+    border: none;
+    color: white;
+    border-radius: 8px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: var(--transition);
+}
+.btn-checkout::after { content: 'Pagar Ahora'; } /* Texto normal */
+.btn-checkout:hover { background: var(--primary-hover); transform: translateY(-2px); }
+
+/* =========================================
+   5. MODAL LOGIN
+   ========================================= */
+.modal-overlay {
+    position: fixed;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.8);
+    display: none; /* JS lo activa con flex */
+    justify-content: center;
+    align-items: center;
+    z-index: 1000;
+}
+
+.modal-overlay.active { display: flex; }
+
+.modal-content {
+    background: var(--bg-card);
+    padding: 40px;
+    border-radius: 16px;
+    border: 1px solid var(--border);
+    width: 100%;
+    max-width: 400px;
+    text-align: center;
+    box-shadow: 0 20px 50px rgba(0,0,0,0.5);
+}
+
+.modal-content h2 { margin-bottom: 20px; }
+
+.modal-content input {
+    width: 100%;
+    padding: 12px;
+    margin-bottom: 15px;
+    background: rgba(0,0,0,0.2);
+    border: 1px solid var(--border);
+    color: white;
+    border-radius: 6px;
+}
+
+.modal-actions { display: flex; flex-direction: column; gap: 10px; }
+
+.btn-login-submit {
+    padding: 12px;
+    background: var(--primary);
+    color: white;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+    font-weight: bold;
+}
+
+.btn-close-modal {
+    background: none;
+    border: none;
+    color: var(--text-muted);
+    cursor: pointer;
+    text-decoration: underline;
+}
+
+/* Responsive */
+@media (max-width: 1024px) {
+    .app-layout { flex-direction: column; }
+    .main-content { margin-right: 0; padding: 20px; }
+    .cart-sidebar {
+        width: 100%;
+        height: auto;
+        position: fixed;
+        bottom: 0;
+        top: auto;
+        border-left: none;
+        border-top: 1px solid var(--border);
+        max-height: 60vh;
+    }
+}
+/* Añade esto al final de tu style.css existente (la versión optimizada que te pasé antes) */
+
+/* --- ESTILOS DE PESTAÑAS LOGIN/REGISTRO --- */
+.auth-tabs {
+    display: flex;
+    justify-content: center;
+    margin-bottom: 25px;
+    border-bottom: 1px solid var(--border);
+}
+
+.auth-tab {
+    flex: 1;
+    background: transparent;
+    border: none;
+    padding: 10px;
+    color: var(--text-muted);
+    font-weight: bold;
+    cursor: pointer;
+    border-bottom: 2px solid transparent;
+    transition: 0.3s;
+}
+
+.auth-tab:hover { color: white; }
+
+.auth-tab.active {
+    color: var(--primary);
+    border-bottom: 2px solid var(--primary);
+}
+
+/* Ajustes menores */
+#modal-title { font-size: 1.5rem; color: white; margin-bottom: 20px; }
+
+/* Indicador de bloqueo en botón añadir */
+.btn-add-initial:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+}
+
+/* Cambiar colores a una paleta más "Racing" (Rojo/Gris) si quieres */
+/* :root {
+    --primary: #dc2626;  <-- Rojo Racing
+    --accent: #f59e0b;   <-- Naranja Ámbar
+}
+*/
+/* Copia el CSS anterior y AÑADE O MODIFICA estas partes */
+
+/* --- IMÁGENES DE PRODUCTO --- */
+.product-card {
+    padding: 0; /* Quitamos padding para que la imagen toque bordes */
+    overflow: hidden;
+    /* Resto igual... */
+    background: var(--bg-card);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    display: flex; flex-direction: column;
+    transition: var(--transition);
+}
+
+.img-container {
+    width: 100%;
+    height: 180px;
+    overflow: hidden;
+    border-bottom: 1px solid var(--border);
+    position: relative;
+}
+
+.product-img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform 0.5s ease;
+}
+
+.product-card:hover .product-img {
+    transform: scale(1.1); /* Efecto zoom suave */
+}
+
+.card-content {
+    padding: 20px;
+}
+
+/* --- IMAGEN EN CARRITO --- */
+.cart-item {
+    display: flex; align-items: center; gap: 10px;
+    padding: 10px;
+}
+
+.cart-thumb {
+    width: 50px; height: 50px;
+    border-radius: 6px;
+    object-fit: cover;
+    border: 1px solid var(--border);
+}
+
+.cart-item-info { flex: 1; }
+
+/* --- BOTONES MINI DEL CARRITO --- */
+.btn-mini {
+    width: 25px; height: 25px;
+    border: 1px solid var(--border);
+    background: #333; color: white;
+    cursor: pointer; display: flex; align-items: center; justify-content: center;
+}
+.btn-mini:hover { background: var(--primary); border-color: var(--primary); }
+
+/* Mensaje sin resultados */
+.no-results {
+    grid-column: 1 / -1;
+    text-align: center;
+    padding: 40px;
+    color: var(--text-muted);
+    font-size: 1.2rem;
+    border: 1px dashed var(--border);
+}
+
+/* Ajuste del botón Header Logged In */
+.btn-login-trigger.logged-in {
+    border-color: var(--accent);
+    color: var(--accent);
+}
+.btn-login-trigger.logged-in:hover {
+    background: var(--accent);
+    color: black;
+}
+/* --- ESTILOS DE STOCK --- */
+
+/* Badge de stock sobre la imagen */
+.stock-badge {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    background: rgba(0, 0, 0, 0.7);
+    color: white;
+    padding: 4px 8px;
+    border-radius: 4px;
+    font-size: 0.75rem;
+    font-weight: bold;
+    border: 1px solid rgba(255, 255, 255, 0.3);
+    z-index: 10;
+}
+
+.stock-badge.low-stock {
+    background: rgba(239, 68, 68, 0.9); /* Rojo si queda poco */
+    color: white;
+    border-color: #ef4444;
+}
+
+.stock-badge.no-stock {
+    background: #333;
+    color: #888;
+    border-color: #555;
+}
+
+/* Botón Agotado */
+.btn-sold-out {
+    background: #27272a;
+    color: #52525b;
+    border: 1px solid #3f3f46;
+    cursor: not-allowed;
+}
+
+.btn-sold-out:hover {
+    background: #27272a; /* No cambia al hover */
+    transform: none;
+}
+
+/* Opacidad de la tarjeta si está agotado */
+.card-sold-out {
+    opacity: 0.7;
+}
+
+.card-sold-out .product-img {
+    filter: grayscale(80%); /* Foto en blanco y negro si no hay stock */
+}
+/* --- ESTILOS DEL DESPLEGABLE DE BÚSQUEDA --- */
+.search-wrapper {
+    position: relative; /* Importante para que el absolute funcione */
+    max-width: 600px;
+}
+
+.suggestions-box {
+    position: absolute;
+    top: 100%;
+    left: 0;
+    width: 100%;
+    background: #09090b; /* Fondo oscuro sólido */
+    border: 1px solid var(--border);
+    border-top: none;
+    border-radius: 0 0 8px 8px;
+    z-index: 1000;
+    max-height: 300px;
+    overflow-y: auto;
+    display: none; /* Oculto por defecto */
+    box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+}
+
+.suggestions-box.active {
+    display: block;
+}
+
+.suggestion-item {
+    padding: 12px 16px;
+    cursor: pointer;
+    border-bottom: 1px solid rgba(255,255,255,0.05);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    transition: background 0.2s;
+}
+
+.suggestion-item:hover {
+    background: rgba(99, 102, 241, 0.1); /* Toque azul al pasar mouse */
+    color: white;
+}
+
+.suggestion-item:last-child {
+    border-bottom: none;
+}
+
+.suggestion-item .s-name { font-weight: 500; }
+.suggestion-item .s-price { color: var(--accent); font-family: 'JetBrains Mono'; font-size: 0.9em; }
+.suggestion-item .s-stock-warning { color: var(--danger); font-size: 0.8em; margin-right: 10px; }
+
+/* --- ESTILOS DE ADMINISTRADOR --- */
+
+/* Borde verde para indicar modo admin */
+.card-admin {
+    border-color: #22c55e !important;
+    background: rgba(34, 197, 94, 0.05) !important;
+}
+
+.admin-badge {
+    background: #22c55e;
+    color: black;
+    border: none;
+    font-weight: 900;
+}
+
+.admin-controls {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    background: #000;
+    padding: 5px;
+    border-radius: 6px;
+    border: 1px solid #333;
+}
+
+.admin-controls label {
+    font-size: 0.8rem;
+    font-weight: bold;
+    color: #22c55e;
+}
+
+.stock-input {
+    width: 60px;
+    background: #111;
+    border: 1px solid #333;
+    color: white;
+    padding: 5px;
+    text-align: center;
+    border-radius: 4px;
+}
+
+.btn-admin-save {
+    flex: 1;
+    background: #22c55e;
+    color: black;
+    border: none;
+    padding: 6px;
+    border-radius: 4px;
+    font-weight: bold;
+    cursor: pointer;
+    font-size: 0.8rem;
+}
+.btn-admin-save:hover {
+    background: #4ade80;
+}
