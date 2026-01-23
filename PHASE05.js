@@ -1,17 +1,17 @@
-let clientes = [];
+var clientes = [];
 let myInterval = null;
 const clock = document.getElementById("clock");
-const botonReloj = document.getElementById("pararReloj");
+const btnReloj = document.getElementById("pararReloj");
 const selectorColor = document.getElementById("colores"); // Referencia al select de color
 const tbody=document.querySelector('#Infoclientes tbody');
-const nombretxt = document.getElementById("nombre");
-const anio = document.getElementById("anio");
-const habitual = document.getElementById("habitual");
-const categoria = document.getElementById("categoria");
+const txtNombre= document.getElementById("nombre");
+const txtAnio = document.getElementById("anio");
+const chkHabitual = document.getElementById("habitual");
+const SelectCategoria = document.getElementById("categoria");
 const generoRadios = document.getElementsByName("genero");
-const btnAddCliente = document.getElementById("btnAddCliente");
+const btnAddCliente = document.getElementById("agregarCliente");
 
-btnAddCliente.addEventListener('click', agregarCliente);
+
 function agregarCliente() {
   let datos = capturarDatos();
 
@@ -47,12 +47,14 @@ function agregarCliente() {
   });
 
   guardarDatos();
+  actualizarContador();
+  mostrarClientesTabla();
 
   alert("Cliente añadido correctamente.");
-  actualizarContador();
   document.getElementById("formCliente").reset();
   mostrarClientesTabla();
 }
+btnAddCliente.addEventListener("click", agregarCliente);
 /*btnAddCliente.addEventListener("click", () => { 
           let datos = capturarDatos();
 
@@ -109,6 +111,7 @@ function guardarDatos() {
   localStorage.setItem("clientes", JSON.stringify(clientes));
 }
 
+//Función para cargar datos desde LocalStorage
 function cargarDatos() {
   let datos = localStorage.getItem("clientes");
   if (datos) {
@@ -117,11 +120,14 @@ function cargarDatos() {
   }
 }
 
+//Función para cambiar el color del reloj y guardarlo en LocalStorage
 function cambiarColorReloj() {
   const colorSeleccionado = selectorColor.value;
   clock.style.color = colorSeleccionado;
   localStorage.setItem("clockColor", colorSeleccionado); // Guardar en localStorage
 }
+
+//Función para cargar el color del reloj desde LocalStorage
 function cargarColorReloj() {
   const colorGuardado = localStorage.getItem("clockColor");
   if (colorGuardado) {
@@ -129,6 +135,43 @@ function cargarColorReloj() {
     selectorColor.value = colorGuardado; // Poner el select en la opción correcta
   }
 }
+
+//Función para actualizar el reloj
+function actualizarReloj() {
+  const date = new Date();
+  clock.innerHTML = `Hora actual: ${date.toLocaleTimeString()}`;
+}
+
+//Función para iniciar el reloj
+function iniciarReloj() {
+  clock.style.textDecoration = "none";
+  clock.style.opacity = "1";
+  actualizarReloj();
+
+  myInterval = setInterval(actualizarReloj, 1000);
+  btnReloj.value = "Detener reloj";
+}
+
+//Función para detener el reloj
+function detenerReloj() {
+  clearInterval(myInterval);
+  myInterval = null;
+  clock.style.textDecoration = "line-through";
+  clock.style.opacity = "0.5";
+  clock.innerHTML += " - Parado";
+  btnReloj.value = "Iniciar reloj";
+}
+
+//Función para alternar el estado del reloj
+function alternarReloj() {
+  if (myInterval) {
+    detenerReloj();
+  } else {
+    iniciarReloj();
+  }
+}
+
+//Función para borrar todos los datos
 function borrarDatos() {
   if (confirm("¿Seguro que quieres borrar todos los datos?")) {
     clientes = [];
@@ -141,71 +184,24 @@ function borrarDatos() {
     clock.style.color = "black";
     selectorColor.value = "black";
   }
+  mostrarClientesTabla();
 }
 
-function actualizarReloj() {
-  const date = new Date();
-  clock.innerHTML = `Hora actual: ${date.toLocaleTimeString()}`;
-}
-
-function iniciarReloj() {
-  clock.style.textDecoration = "none";
-  clock.style.opacity = "1";
-  actualizarReloj();
-
-  myInterval = setInterval(actualizarReloj, 1000);
-  botonReloj.textContent = "Detener reloj";
-}
-
-function detenerReloj() {
-  clearInterval(myInterval);
-  myInterval = null;
-  clock.style.textDecoration = "line-through";
-  clock.style.opacity = "0.5";
-  clock.innerHTML += " - Parado";
-  botonReloj.textContent = "Iniciar reloj";
-}
-
-function alternarReloj() {
-  if (myInterval) {
-    detenerReloj();
-  } else {
-    iniciarReloj();
-  }
-}
-
-document.getElementById("pararReloj").onclick = alternarReloj;
-
-function capturarDatos() {
-  let nombretxt=nombretxt.value.trim();
-  let anio=anio.value.trim();
-  let checkedh=habitual.checked;
-  let categoria=categoria.value;
-  const genero = "";
-  for (let i = 0; i < generoRadios.length; i++) {
-    if (generoRadios[i].checked) {
-      genero = generoRadios[i].value;
-    }
-  }
-
-  return { nombretxt, anio, checkedh, categoria, genero };
-}
-
-
+//Función para eliminar un cliente por nombre
 function eliminarCliente() {
   if (clientes.length === 0) {
     alert("No hay clientes para eliminar.");
     return;
   }
 
-  var nombreEliminar = prompt("Introduce el nombre del cliente que quieres eliminar:");
+  let nombreEliminar = prompt("Introduce el nombre del cliente que quieres eliminar:");
 
   if (!nombreEliminar) {
     alert("Operación cancelada.");
     return;
   }
 
-  var index = clientes.findIndex(c => c.nombre.toLowerCase() === nombreEliminar.toLowerCase());
+  let index = clientes.findIndex(c => c.nombre.toLowerCase() === nombreEliminar.toLowerCase());
 
   if (index !== -1) {
     clientes.splice(index, 1);
@@ -218,6 +214,7 @@ function eliminarCliente() {
   mostrarClientesTabla();
 }
 
+//Función para listar clientes
 function listarClientes() {
   if (clientes.length === 0) {
     alert("No hay clientes registrados.");
@@ -232,6 +229,7 @@ function listarClientes() {
   alert(mensaje);
 }
 
+//Función para finalizar y mostrar resumen
 function finalizar() {
   if (clientes.length === 0) {
     alert("No hay clientes registrados para finalizar.");
@@ -254,11 +252,13 @@ function finalizar() {
   alert(`Total de clientes registrados: ${clientes.length}`);
 }
 
+//Función para actualizar el contador de clientes
 function actualizarContador() {
   document.getElementById("contador").textContent =
     "Clientes añadidos: " + clientes.length;
 }
 
+//Función para mostrar los clientes en la tabla
 function mostrarClientesTabla(){
   tbody.innerHTML='';
   clientes.forEach(c =>{
@@ -272,5 +272,3 @@ function mostrarClientesTabla(){
     </tr>`
   })
 }
-//Esto es una subida com el script de Git en powershell
-//This is a commit with Git script in powershell

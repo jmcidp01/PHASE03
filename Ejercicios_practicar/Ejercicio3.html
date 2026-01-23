@@ -1,0 +1,87 @@
+<!--Ejercicio 3: Optimización DOM (Fragment) + Traversal
+//Objetivo: Insertar 100 elementos sin bloquear el navegador y saber borrar al padre.
+
+//Enunciado: Genera 50 botones. Al hacer clic en cualquier botón, debe borrarse el contenedor entero (el padre) de esos botones.-->
+
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>Ejercicio 3: Optimización DOM (Fragment) + Traversal</title>
+    <style>
+        /* Estilos básicos para mejor visualización */
+        body { font-family: sans-serif; }
+        #contenedorBotones {
+            padding: 10px;
+            border: 2px solid #007bff;
+            background-color: #f8f9fa;
+        }
+        button {
+            margin: 5px;
+            padding: 8px 12px;
+            cursor: pointer;
+            border: 1px solid #007bff;
+            background-color: #e9ecef;
+            transition: background-color 0.2s;
+        }
+        button:hover {
+            background-color: #ced4da;
+        }
+    </style>
+</head>
+<body>
+
+    <h1>Optimización DOM + Traversal</h1>
+    <p>Haz clic en **cualquier** botón para borrar todo el contenedor azul.</p>
+
+    <div id="contenedorBotones">
+        </div>
+
+    <script>
+        // Número de botones a generar
+        const NUM_BOTONES = 50;
+        
+        // 1. Obtener el contenedor principal
+        const contenedor = document.getElementById('contenedorBotones');
+
+        // 2. Crear un DocumentFragment para optimizar la inserción
+        // Esto evita que el navegador redibuje la página 50 veces.
+        const fragmento = document.createDocumentFragment();
+
+        // 3. Función que se ejecutará al hacer clic en cualquier botón
+        function manejarClickBoton(event) {
+            // El 'event.currentTarget' es el botón en el que se hizo clic.
+            const botonClicado = event.currentTarget;
+            
+            // Traversal: Accedemos al elemento padre del botón
+            const elementoPadre = botonClicado.parentElement;
+
+            // Borrar al padre: Si existe, lo eliminamos del DOM
+            if (elementoPadre) {
+                elementoPadre.remove();
+                console.log('✅ Contenedor eliminado con éxito.');
+            }
+        }
+
+        // 4. Generar y ensamblar los 50 botones en el fragmento
+        for (let i = 1; i <= NUM_BOTONES; i++) {
+            // Crear el elemento botón
+            const boton = document.createElement('button');
+            boton.textContent = `Botón ${i}`;
+            
+            // Asignar el evento click
+            // Al hacer clic, se ejecutará la función 'manejarClickBoton'
+            boton.addEventListener('click', manejarClickBoton);
+            
+            // Añadir el botón al fragmento (¡rápido y eficiente!)
+            fragmento.appendChild(boton);
+        }
+
+        // 5. Inserción final: Añadir el fragmento completo al contenedor real
+        // Solo hay un único redibujado de la página, por lo que no se bloquea.
+        contenedor.appendChild(fragmento);
+        console.log(`Se han insertado ${NUM_BOTONES} botones de forma optimizada.`);
+
+    </script>
+</body>
+</html>

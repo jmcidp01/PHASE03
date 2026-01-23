@@ -1,9 +1,11 @@
 let clientes = [];
 let myInterval = null;
 const clock = document.getElementById("clock");
-const botonReloj = document.getElementById("pararReloj");
+const btnReloj = document.getElementById("pararReloj");
 const selectorColor = document.getElementById("colores"); // Referencia al select de color
 const tbody=document.querySelector('#Infoclientes tbody');
+let nombreInput, anioInput, habitualCheckbox, categoriaSelect, generoRadios;
+let btnAnadir, btnListar, btnFinalizar, btnEliminar, btnBorrar;
 
 document.addEventListener("DOMContentLoaded", () => {
   nombreInput = document.getElementById("nombre");
@@ -82,7 +84,7 @@ function iniciarReloj() {
   actualizarReloj();
 
   myInterval = setInterval(actualizarReloj, 1000);
-  botonReloj.textContent = "Detener reloj";
+  btnReloj.value = "Detener reloj";
 }
 
 function detenerReloj() {
@@ -91,7 +93,7 @@ function detenerReloj() {
   clock.style.textDecoration = "line-through";
   clock.style.opacity = "0.5";
   clock.innerHTML += " - Parado";
-  botonReloj.textContent = "Iniciar reloj";
+  btnReloj.value = "Iniciar reloj";
 }
 
 function alternarReloj() {

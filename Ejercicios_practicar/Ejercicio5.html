@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="Ejercicio5.js" defer></script>
+    <title>Carrito de Compra</title>
+</head>
+<body>
+    <h3>Catálogo</h3>
+<button onclick="agregar('Manzana', 1.5)">Manzana (1.5€)</button>
+<button onclick="agregar('Pan', 0.8)">Pan (0.8€)</button>
+<button onclick="agregar('Leche', 1.2)">Leche (1.2€)</button>
+
+<h3>Tu Carrito: <span id="totalPrecio">0</span>€</h3>
+<ul id="listaCarrito"></ul>
+
+<script>
+    let carrito = [];
+
+    function agregar(producto, precio) {
+        // 1. Añadir objeto al array
+        carrito.push({ nombre: producto, precio: precio });
+        actualizarVista();
+    }
+
+    function actualizarVista() {
+        const lista = document.getElementById('listaCarrito');
+        const spanTotal = document.getElementById('totalPrecio');
+
+        // 2. Pintar lista (map + join es un truco rápido)
+        lista.innerHTML = carrito.map(item => `<li>${item.nombre} - ${item.precio}€</li>`).join('');
+
+        // 3. CALCULAR TOTAL (Uso de REDUCE) - ¡Clave para examen!
+        // .reduce((acumulador, itemActual) => acumulador + valor, valorInicial)
+        const total = carrito.reduce((sum, item) => sum + item.precio, 0);
+        
+        // .toFixed(2) para que queden 2 decimales bonitos
+        spanTotal.textContent = total.toFixed(2);
+    }
+</script>
+</body>
+</html>

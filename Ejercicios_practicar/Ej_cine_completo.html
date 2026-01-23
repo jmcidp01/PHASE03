@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sala Cine</title>
+    <script src="Ej_cine_completo.js" defer></script>
+    <style>
+        body { font-family: sans-serif; padding: 20px; }
+        
+        /* Estilos para la tabla del cine */
+        table { border-collapse: collapse; margin-top: 20px; }
+        td {
+            width: 50px; height: 50px;
+            text-align: center; border: 1px solid #333;
+            cursor: pointer; /* Manita al pasar el ratón */
+        }
+        
+        /* CLASES PARA LOS ESTADOS DE LOS ASIENTOS */
+        .libre { background-color: #ccffcc; }       /* Verde */
+        .ocupado { background-color: #ffcccc; pointer-events: none; } /* Rojo + No clicable */
+        .seleccionado { background-color: #aaf; }   /* Azul */
+
+        /* Estilo para la imagen de la peli */
+        img { width: 150px; border-radius: 10px; }
+        
+        .reloj { font-size: 1.5em; font-weight: bold; color: red; margin-bottom: 10px;}
+        #Estado { margin-top: 20px; padding: 10px; border: 1px solid #ccc; background: #f9f9f9; }
+    </style>
+</head>
+<body>
+    
+    <div id="principal"></div>
+
+    <div class="reloj">Tiempo restante: <span id="contador">60</span>s</div>
+
+    <h3>Pantalla</h3>
+    <div id="Cuadricula"></div>
+
+    <div id="Estado">
+        <p>Entradas seleccionadas: <span id="cantidad">0</span></p>
+        <p>Total a pagar: <span id="total">0</span>€</p>
+        <button id="btnConfirmar">Confirmar compra</button>
+    </div>
+
+</body>
+</html>
